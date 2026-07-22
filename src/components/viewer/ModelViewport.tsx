@@ -1,0 +1,61 @@
+"use client";
+
+import { Suspense } from "react";
+import { Canvas } from "@react-three/fiber";
+import { OrbitControls, Bounds, Environment } from "@react-three/drei";
+import { Model } from "@/components/viewer/Model";
+import { TourCamera } from "@/components/viewer/TourCamera";
+import { HotspotMarkers } from "@/components/viewer/HotspotMarkers";
+import { useEditorStore } from "@/lib/store";
+
+function LoaderFallback() {
+  return (
+    <mesh>
+      <boxGeometry args={[0.4, 0.4, 0.4]} />
+      <meshStandardMaterial color="#94a3b8" wireframe />
+    </mesh>
+  );
+}
+
+export function ModelViewport() {
+  const modelUrl = useEditorStore((s) => s.model.url);
+  const selectNode = useEditorStore((s) => s.selectNode);
+  const mode = useEditorStore((s) => s.mode);
+  const hotspotPanelOpen = useEditorStore((s) => s.hotspotPanelOpen);
+  const useBounds = mode === "edit" && !hotspotPanelOpen;
+
+  return (
+    <div className="relative h-full w-full bg-neutral-900">
+      <Canvas
+        camera={{ position: [12, 145, 18], fov: 40, near: 0.1, far: 2000 }}
+        gl={{ antialias: true }}
+        onPointerMissed={() => selectNode(null)}
+      >
+        <color attach="background" args={["#0c0c0c"]} />
+        <ambientLight intensity={0.55} />
+        <directionalLight position={[40, 160, 30]} intensity={1.2} />
+        <directionalLight position={[-30, 140, -20]} intensity={0.4} />
+        <Suspense fallback={<LoaderFallback />}>
+          {useBounds ? (
+            <Bounds fit clip observe margin={1.35}>
+              <Model url={modelUrl} />
+            </Bounds>
+          ) : (
+            <Model url={modelUrl} />
+          )}
+          <HotspotMarkers />
+          <Environment preset="city" />
+        </Suspense>
+        <TourCamera />
+        <OrbitControls
+          makeDefault
+          enableDamping
+          dampingFactor={0.08}
+          minDistance={0.5}
+          maxDistance={80}
+        />
+        {/* TODO: storyboard camera bookmarks — animate OrbitControls target/position per tour step */}
+      </Canvas>
+    </div>
+  );
+}
