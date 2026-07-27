@@ -6,6 +6,7 @@ import { OrbitControls, Bounds, Environment } from "@react-three/drei";
 import { Model } from "@/components/viewer/Model";
 import { TourCamera } from "@/components/viewer/TourCamera";
 import { HotspotMarkers } from "@/components/viewer/HotspotMarkers";
+import { ExplodeControls } from "@/components/viewer/ExplodeControls";
 import { useEditorStore } from "@/lib/store";
 
 function LoaderFallback() {
@@ -56,6 +57,12 @@ export function ModelViewport() {
         />
         {/* TODO: storyboard camera bookmarks — animate OrbitControls target/position per tour step */}
       </Canvas>
+
+      <div className="pointer-events-none absolute top-3 right-3 z-10 w-[220px]">
+        <div className="pointer-events-auto">
+          <ExplodeControls compact />
+        </div>
+      </div>
     </div>
   );
 }

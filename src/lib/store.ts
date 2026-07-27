@@ -34,10 +34,18 @@ interface EditorState {
   isNarrating: boolean;
   autoAdvance: boolean;
 
+  /**
+   * Exploded-view separation amount (0 = assembled, 1 = fully expanded).
+   * Hotspot focus can still pull a related part out when this is 0.
+   */
+  explodeAmount: number;
+
   setSceneGraph: (graph: SceneNode | null) => void;
   selectNode: (uuid: string | null) => void;
   setDescription: (uuid: string, description: string) => void;
   updateHotspotDescription: (hotspotId: string, description: string) => void;
+  setExplodeAmount: (amount: number) => void;
+  toggleExplode: () => void;
 
   setMode: (mode: AppMode) => void;
   /** Open a hotspot: show description panel, focus camera, optionally speak description */
@@ -103,6 +111,8 @@ export const useEditorStore = create<EditorState>((set, get) => ({
   isNarrating: false,
   autoAdvance: true,
 
+  explodeAmount: 0,
+
   setSceneGraph: (graph) => set({ sceneGraph: graph }),
 
   selectNode: (uuid) => set({ selectedNodeId: uuid }),
@@ -117,6 +127,14 @@ export const useEditorStore = create<EditorState>((set, get) => ({
       hotspots: state.hotspots.map((h) =>
         h.id === hotspotId ? { ...h, description } : h,
       ),
+    })),
+
+  setExplodeAmount: (amount) =>
+    set({ explodeAmount: Math.max(0, Math.min(1, amount)) }),
+
+  toggleExplode: () =>
+    set((state) => ({
+      explodeAmount: state.explodeAmount > 0.5 ? 0 : 1,
     })),
 
   setMode: (mode) => {

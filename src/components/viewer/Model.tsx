@@ -5,6 +5,7 @@ import { useGLTF } from "@react-three/drei";
 import { useThree } from "@react-three/fiber";
 import type { ThreeEvent } from "@react-three/fiber";
 import * as THREE from "three";
+import { useExplodeAnimation } from "@/components/viewer/useExplodeAnimation";
 import { buildSceneGraph } from "@/lib/scene-graph";
 import { useCurrentHotspot, useEditorStore } from "@/lib/store";
 
@@ -105,6 +106,8 @@ export function Model({ url }: { url: string }) {
   const hotspotPanelOpen = useEditorStore((s) => s.hotspotPanelOpen);
 
   const root = useMemo(() => scene.clone(true), [scene]);
+
+  useExplodeAnimation(root);
 
   useEffect(() => {
     const graph = buildSceneGraph(root);

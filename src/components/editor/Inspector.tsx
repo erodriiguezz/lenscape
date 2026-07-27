@@ -1,5 +1,6 @@
 "use client";
 
+import { ExplodeControls } from "@/components/viewer/ExplodeControls";
 import { findNode } from "@/lib/scene-graph";
 import { useCurrentHotspot, useEditorStore } from "@/lib/store";
 import { Textarea } from "@/components/ui/textarea";
@@ -46,6 +47,9 @@ export function Inspector() {
       </div>
 
       <div className="flex flex-1 flex-col gap-4 overflow-y-auto p-3">
+        <ExplodeControls />
+        <Separator />
+
         {!selected && !showHotspot ? (
           <p className="text-sm text-muted-foreground">
             Select a mesh or click a hotspot pin to open its description.

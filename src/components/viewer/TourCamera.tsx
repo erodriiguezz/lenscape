@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { useFrame, useThree } from "@react-three/fiber";
 import * as THREE from "three";
 import type { OrbitControls as OrbitControlsImpl } from "three-stdlib";
@@ -22,6 +22,7 @@ export function TourCamera() {
   const hotspot = useCurrentHotspot();
   const mode = useEditorStore((s) => s.mode);
   const hotspotPanelOpen = useEditorStore((s) => s.hotspotPanelOpen);
+  const explodeAmount = useEditorStore((s) => s.explodeAmount);
   const { camera, scene, controls } = useThree();
   const orbit = controls as OrbitControlsImpl | null;
 
@@ -29,24 +30,26 @@ export function TourCamera() {
     cam: new THREE.Vector3().copy(camera.position),
     target: new THREE.Vector3(0, 137, 0),
     active: false,
+    nodeName: null as string | null,
   });
 
-  useEffect(() => {
+  const updateGoals = () => {
     const shouldFocus =
       hotspot && (mode === "present" || hotspotPanelOpen);
     if (!shouldFocus || !hotspot) {
       goals.current.active = false;
-      return;
+      goals.current.nodeName = null;
+      return false;
     }
 
     const obj = findObjectByName(scene, hotspot.targetNodeName);
     if (!obj) {
       console.warn(`[tour] node not found: ${hotspot.targetNodeName}`);
-      return;
+      return false;
     }
 
     _box.setFromObject(obj);
-    if (_box.isEmpty()) return;
+    if (_box.isEmpty()) return false;
 
     _box.getCenter(_center);
     _box.getSize(_size);
@@ -60,9 +63,19 @@ export function TourCamera() {
     goals.current.cam.copy(_camGoal);
     goals.current.target.copy(_targetGoal);
     goals.current.active = true;
-  }, [hotspot, mode, hotspotPanelOpen, scene, camera]);
+    goals.current.nodeName = hotspot.targetNodeName;
+    return true;
+  };
+
+  useEffect(() => {
+    updateGoals();
+  }, [hotspot, mode, hotspotPanelOpen, scene, camera, explodeAmount]);
 
   useFrame((_, delta) => {
+    // Follow parts as they explode / assemble while a hotspot is focused
+    if (hotspot && (mode === "present" || hotspotPanelOpen)) {
+      updateGoals();
+    }
     if (!goals.current.active || !orbit) return;
     const t = 1 - Math.exp(-delta * 2.4);
     camera.position.lerp(goals.current.cam, t);

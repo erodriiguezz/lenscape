@@ -1,12 +1,16 @@
 "use client";
 
 import { Html } from "@react-three/drei";
-import { useMemo } from "react";
+import { useRef } from "react";
 import * as THREE from "three";
-import { useThree } from "@react-three/fiber";
+import { useFrame, useThree } from "@react-three/fiber";
 import { useEditorStore } from "@/lib/store";
 import { findObjectByName } from "@/lib/scene-utils";
 import { cn } from "@/lib/utils";
+
+const _box = new THREE.Box3();
+const _center = new THREE.Vector3();
+const _size = new THREE.Vector3();
 
 function HotspotMarker({
   index,
@@ -23,22 +27,35 @@ function HotspotMarker({
   const sceneGraph = useEditorStore((s) => s.sceneGraph);
   const openHotspot = useEditorStore((s) => s.openHotspot);
   const mode = useEditorStore((s) => s.mode);
+  const groupRef = useRef<THREE.Group>(null);
 
-  const position = useMemo(() => {
-    if (!sceneGraph) return null;
+  useFrame(() => {
+    const group = groupRef.current;
+    if (!group || !sceneGraph) {
+      if (group) group.visible = false;
+      return;
+    }
     const obj = findObjectByName(scene, nodeName);
-    if (!obj) return null;
-    const box = new THREE.Box3().setFromObject(obj);
-    if (box.isEmpty()) return null;
-    const center = box.getCenter(new THREE.Vector3());
-    center.y += Math.max(box.getSize(new THREE.Vector3()).y * 0.15, 0.3);
-    return center.toArray() as [number, number, number];
-  }, [scene, nodeName, sceneGraph]);
+    if (!obj) {
+      group.visible = false;
+      return;
+    }
+    _box.setFromObject(obj);
+    if (_box.isEmpty()) {
+      group.visible = false;
+      return;
+    }
+    _box.getCenter(_center);
+    _box.getSize(_size);
+    _center.y += Math.max(_size.y * 0.15, 0.3);
+    group.position.copy(_center);
+    group.visible = true;
+  });
 
-  if (!position) return null;
+  if (!sceneGraph) return null;
 
   return (
-    <group position={position}>
+    <group ref={groupRef} visible={false}>
       <Html center distanceFactor={22} zIndexRange={[20, 0]}>
         <button
           type="button"
