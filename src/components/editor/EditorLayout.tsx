@@ -64,15 +64,17 @@ export function EditorLayout() {
           <>
             <button
               type="button"
-              title="Share"
-              className="flex items-center justify-center rounded-studio-full p-2 text-studio-on-surface-variant transition-colors hover:bg-studio-surface-variant"
+              disabled
+              title="Sharing is coming soon"
+              className="flex cursor-not-allowed items-center justify-center rounded-studio-full p-2 text-studio-on-surface-variant/60"
             >
               <Share2 className="size-[18px]" />
             </button>
             <button
               type="button"
-              title="Settings"
-              className="flex items-center justify-center rounded-studio-full p-2 text-studio-on-surface-variant transition-colors hover:bg-studio-surface-variant"
+              disabled
+              title="Settings are coming soon"
+              className="flex cursor-not-allowed items-center justify-center rounded-studio-full p-2 text-studio-on-surface-variant/60"
             >
               <Settings className="size-[18px]" />
             </button>
@@ -81,7 +83,7 @@ export function EditorLayout() {
               <button
                 type="button"
                 onClick={() => setMode("edit")}
-                className="rounded-studio border border-studio-primary px-4 py-1.5 font-studio-heading text-studio-label-md text-studio-primary transition-colors hover:bg-studio-surface-variant"
+                className="cursor-pointer rounded-studio border border-studio-primary px-4 py-1.5 font-studio-heading text-studio-label-md text-studio-primary transition-colors hover:bg-studio-surface-variant"
               >
                 Exit preview
               </button>
@@ -90,7 +92,7 @@ export function EditorLayout() {
                 <button
                   type="button"
                   onClick={playTour}
-                  className="flex items-center gap-1.5 rounded-studio border border-studio-primary px-4 py-1.5 font-studio-heading text-studio-label-md text-studio-primary transition-colors hover:bg-studio-surface-variant"
+                  className="flex cursor-pointer items-center gap-1.5 rounded-studio border border-studio-primary px-4 py-1.5 font-studio-heading text-studio-label-md text-studio-primary transition-colors hover:bg-studio-surface-variant"
                 >
                   <Play className="size-3.5" />
                   Preview
@@ -107,9 +109,14 @@ export function EditorLayout() {
               </>
             )}
 
-            <div className="ml-2 flex size-8 items-center justify-center overflow-hidden rounded-full border border-studio-border-subtle bg-studio-surface-variant">
+            <button
+              type="button"
+              disabled
+              title="Account settings are coming soon"
+              className="ml-2 flex size-8 cursor-not-allowed items-center justify-center overflow-hidden rounded-full border border-studio-border-subtle bg-studio-surface-variant"
+            >
               <UserRound className="size-4 text-studio-on-surface-variant" />
-            </div>
+            </button>
           </>
         }
       />

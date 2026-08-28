@@ -4,7 +4,6 @@ import { useState } from "react";
 import {
   ArrowRight,
   AudioLines,
-  Loader2,
   Pause,
   Play,
   RefreshCw,
@@ -58,7 +57,7 @@ function InspectorTab({
       <button
         type="button"
         onClick={onClick}
-        className="flex flex-1 items-center justify-center gap-2 border-b border-studio-primary py-2 font-studio-heading text-studio-label-sm font-bold text-studio-primary"
+        className="flex flex-1 cursor-pointer items-center justify-center gap-2 border-b border-studio-primary py-2 font-studio-heading text-studio-label-sm font-bold text-studio-primary"
       >
         <Icon className="size-4" />
         {label}
@@ -82,7 +81,7 @@ function InspectorTab({
     <button
       type="button"
       onClick={onClick}
-      className="flex flex-1 items-center justify-center gap-2 py-2 font-studio-heading text-studio-label-sm text-studio-text-muted transition-colors hover:text-studio-on-surface"
+      className="flex flex-1 cursor-pointer items-center justify-center gap-2 py-2 font-studio-heading text-studio-label-sm text-studio-text-muted transition-colors hover:text-studio-on-surface"
     >
       <Icon className="size-4" />
       {label}
@@ -120,7 +119,6 @@ export function Inspector() {
   const playAnimation = useEditorStore((s) => s.playAnimation);
   const stopAnimation = useEditorStore((s) => s.stopAnimation);
   const currentHotspot = useCurrentHotspot();
-  const [regenerating, setRegenerating] = useState(false);
   const [tab, setTab] = useState<"properties" | "animation">("properties");
 
   const selected = selectedNodeId
@@ -193,7 +191,7 @@ export function Inspector() {
                 type="button"
                 onClick={() => (isPlaying ? stopAnimation() : playAnimation(name))}
                 className={cn(
-                  "flex items-center gap-2 rounded-studio border px-3 py-2 text-left font-studio-heading text-studio-label-md transition-colors",
+                  "flex cursor-pointer items-center gap-2 rounded-studio border px-3 py-2 text-left font-studio-heading text-studio-label-md transition-colors",
                   isPlaying
                     ? "border-studio-primary bg-studio-primary/15 text-studio-primary"
                     : "border-studio-border-subtle text-studio-on-surface-variant hover:border-studio-primary hover:text-studio-primary",
@@ -237,20 +235,11 @@ export function Inspector() {
                   </label>
                   <button
                     type="button"
+                    disabled
                     title="AI regeneration is coming soon"
-                    disabled={regenerating}
-                    onClick={() => {
-                      // TODO: AI generation — regenerate this description
-                      setRegenerating(true);
-                      window.setTimeout(() => setRegenerating(false), 900);
-                    }}
-                    className="flex items-center gap-1 font-studio-heading text-studio-label-sm text-studio-tertiary transition-colors hover:text-studio-tertiary-fixed-dim disabled:opacity-60"
+                    className="flex cursor-not-allowed items-center gap-1 font-studio-heading text-studio-label-sm text-studio-tertiary/60"
                   >
-                    {regenerating ? (
-                      <Loader2 className="size-3.5 animate-spin" />
-                    ) : (
-                      <RefreshCw className="size-3.5" />
-                    )}
+                    <RefreshCw className="size-3.5" />
                     Re-generate
                   </button>
                 </div>
@@ -286,7 +275,7 @@ export function Inspector() {
                         },
                       );
                     }}
-                    className="text-studio-on-surface-variant transition-colors hover:text-studio-on-surface"
+                    className="cursor-pointer text-studio-on-surface-variant transition-colors hover:text-studio-on-surface"
                   >
                     <Volume2
                       className={cn(
@@ -315,7 +304,7 @@ export function Inspector() {
                     {" · "}
                     <button
                       type="button"
-                      className="font-medium text-studio-primary underline-offset-2 hover:underline"
+                      className="cursor-pointer font-medium text-studio-primary underline-offset-2 hover:underline"
                       onClick={() => {
                         const idx = hotspots.findIndex(
                           (h) => h.id === activeHotspot.id,
@@ -388,7 +377,7 @@ export function Inspector() {
                           onClick={() =>
                             openHotspot(targetIndex, { speak: false })
                           }
-                          className="flex items-center justify-between gap-2 rounded-studio border border-studio-border-subtle bg-studio-bg-canvas px-3 py-2 text-left transition-colors hover:border-studio-primary"
+                          className="flex cursor-pointer items-center justify-between gap-2 rounded-studio border border-studio-border-subtle bg-studio-bg-canvas px-3 py-2 text-left transition-colors hover:border-studio-primary"
                         >
                           <span className="font-studio-body text-studio-body-md text-studio-text-muted">
                             {conn.label}
@@ -430,7 +419,7 @@ export function Inspector() {
                     onClick={() => toggleIsolatedExplode(selected.name)}
                     aria-pressed={isolatedExplodeNodeName === selected.name}
                     className={cn(
-                      "flex items-center justify-center gap-2 rounded-studio border py-2 font-studio-heading text-studio-label-md transition-colors",
+                      "flex cursor-pointer items-center justify-center gap-2 rounded-studio border py-2 font-studio-heading text-studio-label-md transition-colors",
                       isolatedExplodeNodeName === selected.name
                         ? "border-studio-primary bg-studio-primary/15 text-studio-primary"
                         : "border-studio-border-subtle text-studio-on-surface-variant hover:border-studio-primary hover:text-studio-primary",

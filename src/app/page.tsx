@@ -14,7 +14,6 @@ import {
   Search,
   UserRound,
 } from "lucide-react";
-import { InertNavLink } from "@/components/studio/InertNavLink";
 import { TopNav } from "@/components/studio/TopNav";
 import { cn } from "@/lib/utils";
 
@@ -58,14 +57,6 @@ export default function HomePage() {
   return (
     <div className="lenscape-studio flex min-h-dvh flex-col bg-studio-bg-canvas font-studio-body text-studio-body-md text-studio-on-surface">
       <TopNav
-        nav={
-          <nav className="hidden items-center gap-6 md:flex">
-            <InertNavLink label="Projects" active />
-            <InertNavLink label="Assets" />
-            <InertNavLink label="Analytics" />
-            <InertNavLink label="Settings" />
-          </nav>
-        }
         actions={
           <>
             <div className="relative hidden w-64 lg:block">
@@ -80,15 +71,17 @@ export default function HomePage() {
             </div>
             <button
               type="button"
-              title="Notifications"
-              className="flex size-8 items-center justify-center rounded-full text-studio-text-muted transition-colors hover:bg-studio-surface-container-high hover:text-studio-on-surface"
+              disabled
+              title="Notifications are coming soon"
+              className="flex size-8 cursor-not-allowed items-center justify-center rounded-full text-studio-text-muted/60"
             >
               <Bell className="size-[18px]" />
             </button>
             <button
               type="button"
-              title="Help"
-              className="flex size-8 items-center justify-center rounded-full text-studio-text-muted transition-colors hover:bg-studio-surface-container-high hover:text-studio-on-surface"
+              disabled
+              title="Help is coming soon"
+              className="flex size-8 cursor-not-allowed items-center justify-center rounded-full text-studio-text-muted/60"
             >
               <HelpCircle className="size-[18px]" />
             </button>
@@ -99,9 +92,14 @@ export default function HomePage() {
               <Plus className="size-4" />
               Create Tour
             </Link>
-            <div className="ml-2 flex size-8 items-center justify-center overflow-hidden rounded-full border border-studio-border-subtle bg-studio-surface-container-highest">
+            <button
+              type="button"
+              disabled
+              title="Account settings are coming soon"
+              className="ml-2 flex size-8 cursor-not-allowed items-center justify-center overflow-hidden rounded-full border border-studio-border-subtle bg-studio-surface-container-highest"
+            >
               <UserRound className="size-4 text-studio-on-surface-variant" />
-            </div>
+            </button>
           </>
         }
       />
@@ -122,7 +120,7 @@ export default function HomePage() {
                 type="button"
                 onClick={() => setView("grid")}
                 className={cn(
-                  "flex items-center gap-2 rounded-studio-sm px-3 py-1.5 font-studio-heading text-studio-label-md transition-colors",
+                  "flex cursor-pointer items-center gap-2 rounded-studio-sm px-3 py-1.5 font-studio-heading text-studio-label-md transition-colors",
                   view === "grid"
                     ? "bg-studio-surface-container-high text-studio-on-surface"
                     : "text-studio-text-muted hover:text-studio-on-surface",
@@ -135,7 +133,7 @@ export default function HomePage() {
                 type="button"
                 onClick={() => setView("list")}
                 className={cn(
-                  "flex items-center gap-2 rounded-studio-sm px-3 py-1.5 font-studio-heading text-studio-label-md transition-colors",
+                  "flex cursor-pointer items-center gap-2 rounded-studio-sm px-3 py-1.5 font-studio-heading text-studio-label-md transition-colors",
                   view === "list"
                     ? "bg-studio-surface-container-high text-studio-on-surface"
                     : "text-studio-text-muted hover:text-studio-on-surface",

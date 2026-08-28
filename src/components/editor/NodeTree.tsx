@@ -41,7 +41,7 @@ function NodeRow({ node, depth }: { node: SceneNode; depth: number }) {
           <button
             type="button"
             aria-label={open ? "Collapse" : "Expand"}
-            className="flex size-4 shrink-0 items-center justify-center rounded-studio hover:bg-studio-surface-container-highest"
+            className="flex size-4 shrink-0 cursor-pointer items-center justify-center rounded-studio hover:bg-studio-surface-container-highest"
             onClick={() => setOpen((v) => !v)}
           >
             <ChevronRight
@@ -56,7 +56,7 @@ function NodeRow({ node, depth }: { node: SceneNode; depth: number }) {
         )}
         <button
           type="button"
-          className="min-w-0 flex-1 truncate text-left"
+          className="min-w-0 flex-1 cursor-pointer truncate text-left"
           title={node.name}
           onClick={() => selectNode(node.uuid)}
         >
@@ -180,15 +180,17 @@ export function NodeTree() {
       <div className="flex justify-around border-t border-studio-border-subtle p-2">
         <button
           type="button"
-          title="Help"
-          className="rounded-studio p-2 text-studio-on-surface-variant transition-all hover:bg-studio-surface-container-highest hover:text-studio-on-surface"
+          disabled
+          title="Help is coming soon"
+          className="cursor-not-allowed rounded-studio p-2 text-studio-on-surface-variant/60"
         >
           <HelpCircle className="size-[18px]" />
         </button>
         <button
           type="button"
-          title="Console"
-          className="rounded-studio p-2 text-studio-on-surface-variant transition-all hover:bg-studio-surface-container-highest hover:text-studio-on-surface"
+          disabled
+          title="Console is coming soon"
+          className="cursor-not-allowed rounded-studio p-2 text-studio-on-surface-variant/60"
         >
           <Terminal className="size-[18px]" />
         </button>

@@ -68,7 +68,7 @@ export function TourOverlay() {
                 onClick={prevStep}
                 disabled={currentStepIndex === 0}
                 aria-label="Previous step"
-                className="flex size-7 items-center justify-center rounded-studio text-studio-on-surface transition-colors hover:bg-studio-surface-variant disabled:opacity-40"
+                className="flex size-7 cursor-pointer items-center justify-center rounded-studio text-studio-on-surface transition-colors hover:bg-studio-surface-variant disabled:cursor-not-allowed disabled:opacity-40"
               >
                 <ChevronLeft className="size-4" />
               </button>
@@ -77,7 +77,7 @@ export function TourOverlay() {
                 <button
                   type="button"
                   onClick={pauseTour}
-                  className="flex items-center gap-1.5 rounded-studio bg-studio-surface-variant px-2.5 py-1.5 font-studio-heading text-studio-label-md text-studio-on-surface transition-colors hover:bg-studio-surface-container-highest"
+                  className="flex cursor-pointer items-center gap-1.5 rounded-studio bg-studio-surface-variant px-2.5 py-1.5 font-studio-heading text-studio-label-md text-studio-on-surface transition-colors hover:bg-studio-surface-container-highest"
                 >
                   <Pause className="size-3.5" />
                   Pause
@@ -86,7 +86,7 @@ export function TourOverlay() {
                 <button
                   type="button"
                   onClick={playTour}
-                  className="flex items-center gap-1.5 rounded-studio bg-studio-surface-variant px-2.5 py-1.5 font-studio-heading text-studio-label-md text-studio-on-surface transition-colors hover:bg-studio-surface-container-highest"
+                  className="flex cursor-pointer items-center gap-1.5 rounded-studio bg-studio-surface-variant px-2.5 py-1.5 font-studio-heading text-studio-label-md text-studio-on-surface transition-colors hover:bg-studio-surface-container-highest"
                 >
                   <Play className="size-3.5" />
                   {currentStepIndex === hotspots.length - 1 && !isNarrating
@@ -100,7 +100,7 @@ export function TourOverlay() {
                 onClick={nextStep}
                 disabled={currentStepIndex >= hotspots.length - 1}
                 aria-label="Next step"
-                className="flex size-7 items-center justify-center rounded-studio text-studio-on-surface transition-colors hover:bg-studio-surface-variant disabled:opacity-40"
+                className="flex size-7 cursor-pointer items-center justify-center rounded-studio text-studio-on-surface transition-colors hover:bg-studio-surface-variant disabled:cursor-not-allowed disabled:opacity-40"
               >
                 <ChevronRight className="size-4" />
               </button>
@@ -109,7 +109,7 @@ export function TourOverlay() {
             <button
               type="button"
               onClick={stopTour}
-              className="flex items-center gap-1.5 rounded-studio px-2.5 py-1.5 font-studio-heading text-studio-label-md text-studio-on-surface-variant transition-colors hover:bg-studio-surface-variant hover:text-studio-on-surface"
+              className="flex cursor-pointer items-center gap-1.5 rounded-studio px-2.5 py-1.5 font-studio-heading text-studio-label-md text-studio-on-surface-variant transition-colors hover:bg-studio-surface-variant hover:text-studio-on-surface"
             >
               <Square className="size-3" />
               Exit tour
@@ -124,7 +124,7 @@ export function TourOverlay() {
                 title={h.title}
                 onClick={() => goToStep(i, { speak: true })}
                 className={cn(
-                  "h-1.5 w-6 shrink-0 rounded-studio-full transition-colors",
+                  "h-1.5 w-6 shrink-0 cursor-pointer rounded-studio-full transition-colors",
                   i === currentStepIndex
                     ? "bg-studio-primary"
                     : i < currentStepIndex

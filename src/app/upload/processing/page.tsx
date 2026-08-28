@@ -182,7 +182,7 @@ export default function ProcessingPage() {
                   clearUpload();
                   router.push("/upload");
                 }}
-                className="flex w-full items-center justify-center gap-2 rounded-studio border border-studio-outline-variant px-4 py-3 font-studio-heading text-studio-label-md text-studio-on-surface transition-colors hover:bg-studio-surface-variant"
+                className="flex w-full cursor-pointer items-center justify-center gap-2 rounded-studio border border-studio-outline-variant px-4 py-3 font-studio-heading text-studio-label-md text-studio-on-surface transition-colors hover:bg-studio-surface-variant"
               >
                 <XCircle className="size-4" />
                 Cancel processing

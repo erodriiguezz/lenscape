@@ -49,7 +49,7 @@ export function TourStoryboard() {
           type="button"
           title="Play tour"
           onClick={playTour}
-          className="rounded-studio p-1 text-studio-on-surface-variant hover:bg-studio-surface-variant"
+          className="cursor-pointer rounded-studio p-1 text-studio-on-surface-variant hover:bg-studio-surface-variant"
         >
           <Play className="size-[18px]" />
         </button>
@@ -64,7 +64,7 @@ export function TourStoryboard() {
               type="button"
               onClick={() => openHotspot(index, { speak: false })}
               className={cn(
-                "relative flex h-full min-w-[160px] flex-col items-start rounded-studio-lg border p-2 text-left transition-colors",
+                "relative flex h-full min-w-[160px] cursor-pointer flex-col items-start rounded-studio-lg border p-2 text-left transition-colors",
                 active
                   ? "border-studio-primary bg-studio-primary-container/10 ring-1 ring-studio-primary"
                   : "border-studio-border-subtle bg-studio-surface-variant hover:bg-studio-surface-container-highest",

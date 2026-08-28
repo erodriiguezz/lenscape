@@ -212,10 +212,28 @@ export function Model({ url }: { url: string }) {
     }
   };
 
+  const handlePointerOver = (event: ThreeEvent<PointerEvent>) => {
+    event.stopPropagation();
+    document.body.style.cursor = "pointer";
+  };
+  const handlePointerOut = (event: ThreeEvent<PointerEvent>) => {
+    event.stopPropagation();
+    document.body.style.cursor = "auto";
+  };
+
+  useEffect(() => {
+    // Don't leave the cursor stuck as "pointer" if this unmounts mid-hover.
+    return () => {
+      document.body.style.cursor = "auto";
+    };
+  }, []);
+
   return (
     <primitive
       object={root}
       onClick={handleClick}
+      onPointerOver={handlePointerOver}
+      onPointerOut={handlePointerOut}
       // TODO: hotspot placement — raycast + store world position on double-click / modifier+click
     />
   );

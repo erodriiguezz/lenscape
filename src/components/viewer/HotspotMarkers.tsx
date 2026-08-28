@@ -73,7 +73,7 @@ function HotspotMarker({
             openHotspot(index, { speak: mode === "present" });
           }}
           className={cn(
-            "flex size-8 items-center justify-center rounded-full border font-studio-heading text-studio-label-sm shadow-lg backdrop-blur-md transition-transform",
+            "flex size-8 cursor-pointer items-center justify-center rounded-full border font-studio-heading text-studio-label-sm shadow-lg backdrop-blur-md transition-transform",
             active
               ? "scale-110 border-studio-primary bg-studio-primary-container text-studio-on-primary-container shadow-[0_0_12px_rgba(208,188,255,0.4)]"
               : highlighted

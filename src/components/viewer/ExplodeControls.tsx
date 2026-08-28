@@ -43,7 +43,7 @@ export function ExplodeControls({
           onClick={toggleExplode}
           aria-pressed={exploded}
           className={cn(
-            "flex shrink-0 items-center gap-1.5 rounded-studio px-2.5 py-1 font-studio-heading text-studio-label-sm transition-colors",
+            "flex shrink-0 cursor-pointer items-center gap-1.5 rounded-studio px-2.5 py-1 font-studio-heading text-studio-label-sm transition-colors",
             exploded
               ? "bg-studio-primary text-studio-on-primary"
               : "border border-studio-outline-variant bg-studio-surface-variant/40 text-studio-on-surface hover:bg-studio-surface-variant",

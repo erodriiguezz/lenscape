@@ -54,7 +54,7 @@ export function HotspotDescriptionPanel() {
                     useEditorStore.setState({ isNarrating: false }),
                 });
               }}
-              className="flex size-7 items-center justify-center rounded-studio text-studio-on-surface-variant transition-colors hover:bg-studio-surface-variant hover:text-studio-on-surface"
+              className="flex size-7 cursor-pointer items-center justify-center rounded-studio text-studio-on-surface-variant transition-colors hover:bg-studio-surface-variant hover:text-studio-on-surface"
             >
               <Volume2
                 className={cn(
@@ -67,7 +67,7 @@ export function HotspotDescriptionPanel() {
               type="button"
               aria-label="Close"
               onClick={closeHotspotPanel}
-              className="flex size-7 items-center justify-center rounded-studio text-studio-on-surface-variant transition-colors hover:bg-studio-surface-variant hover:text-studio-on-surface"
+              className="flex size-7 cursor-pointer items-center justify-center rounded-studio text-studio-on-surface-variant transition-colors hover:bg-studio-surface-variant hover:text-studio-on-surface"
             >
               <X className="size-4" />
             </button>

@@ -61,14 +61,20 @@ export default function UploadPage() {
           <>
             <button
               type="button"
-              title="Help"
-              className="rounded-studio-full p-2 text-studio-on-surface-variant transition-colors hover:bg-studio-surface-container-high"
+              disabled
+              title="Help is coming soon"
+              className="cursor-not-allowed rounded-studio-full p-2 text-studio-on-surface-variant/60"
             >
               <HelpCircle className="size-[18px]" />
             </button>
-            <div className="ml-2 flex size-8 items-center justify-center overflow-hidden rounded-full border border-studio-border-subtle bg-studio-surface-container-highest">
+            <button
+              type="button"
+              disabled
+              title="Account settings are coming soon"
+              className="ml-2 flex size-8 cursor-not-allowed items-center justify-center overflow-hidden rounded-full border border-studio-border-subtle bg-studio-surface-container-highest"
+            >
               <UserRound className="size-4 text-studio-on-surface-variant" />
-            </div>
+            </button>
           </>
         }
       />
@@ -140,7 +146,7 @@ export default function UploadPage() {
                     e.stopPropagation();
                     setFile(null);
                   }}
-                  className="absolute top-3 right-3 flex size-7 items-center justify-center rounded-studio-full bg-studio-surface-overlay text-studio-on-surface-variant hover:text-studio-on-surface"
+                  className="absolute top-3 right-3 flex size-7 cursor-pointer items-center justify-center rounded-studio-full bg-studio-surface-overlay text-studio-on-surface-variant hover:text-studio-on-surface"
                 >
                   <X className="size-4" />
                 </button>
@@ -193,7 +199,7 @@ export default function UploadPage() {
                 aria-checked={autoGenerate}
                 onClick={() => setAutoGenerate((v) => !v)}
                 className={cn(
-                  "relative h-6 w-11 shrink-0 rounded-studio-full transition-colors",
+                  "relative h-6 w-11 shrink-0 cursor-pointer rounded-studio-full transition-colors",
                   autoGenerate
                     ? "bg-studio-primary"
                     : "bg-studio-surface-muted",
@@ -219,7 +225,7 @@ export default function UploadPage() {
                 type="button"
                 disabled={!canUpload}
                 onClick={handleSubmit}
-                className="flex items-center gap-2 rounded-studio bg-studio-primary px-6 py-2 font-studio-heading text-studio-label-md text-studio-on-primary transition-colors hover:bg-studio-primary/90 disabled:cursor-not-allowed disabled:opacity-40"
+                className="flex cursor-pointer items-center gap-2 rounded-studio bg-studio-primary px-6 py-2 font-studio-heading text-studio-label-md text-studio-on-primary transition-colors hover:bg-studio-primary/90 disabled:cursor-not-allowed disabled:opacity-40"
               >
                 <CloudUpload className="size-4" />
                 Upload Model
