@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
 import { CloudUpload, File as FileIcon, HelpCircle, UserRound, X } from "lucide-react";
+import { TopNav } from "@/components/studio/TopNav";
 import { useUploadFlowStore } from "@/lib/upload-store";
 import { cn } from "@/lib/utils";
 
@@ -54,27 +55,23 @@ export default function UploadPage() {
   }
 
   return (
-    <div className="lenscape-studio flex h-dvh flex-col overflow-hidden bg-studio-background font-studio-body text-studio-body-md text-studio-on-surface">
-      <header className="flex h-16 shrink-0 items-center justify-between border-b border-studio-border-subtle bg-studio-surface px-4">
-        <Link
-          href="/"
-          className="font-studio-heading text-studio-headline-md font-bold text-studio-primary"
-        >
-          Lenscape
-        </Link>
-        <div className="flex items-center gap-2">
-          <button
-            type="button"
-            title="Help"
-            className="rounded-studio-full p-2 text-studio-on-surface-variant transition-colors hover:bg-studio-surface-container-high"
-          >
-            <HelpCircle className="size-[18px]" />
-          </button>
-          <div className="ml-2 flex size-8 items-center justify-center overflow-hidden rounded-full border border-studio-border-subtle bg-studio-surface-container-highest">
-            <UserRound className="size-4 text-studio-on-surface-variant" />
-          </div>
-        </div>
-      </header>
+    <div className="lenscape-studio flex h-dvh flex-col overflow-hidden bg-studio-bg-canvas font-studio-body text-studio-body-md text-studio-on-surface">
+      <TopNav
+        actions={
+          <>
+            <button
+              type="button"
+              title="Help"
+              className="rounded-studio-full p-2 text-studio-on-surface-variant transition-colors hover:bg-studio-surface-container-high"
+            >
+              <HelpCircle className="size-[18px]" />
+            </button>
+            <div className="ml-2 flex size-8 items-center justify-center overflow-hidden rounded-full border border-studio-border-subtle bg-studio-surface-container-highest">
+              <UserRound className="size-4 text-studio-on-surface-variant" />
+            </div>
+          </>
+        }
+      />
 
       <main className="flex flex-1 items-center justify-center overflow-y-auto p-4">
         <div className="w-full max-w-2xl rounded-studio-lg border border-studio-border-subtle bg-studio-surface-container p-8 shadow-2xl">

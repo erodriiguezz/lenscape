@@ -1,10 +1,11 @@
 "use client";
 
 /**
- * Narration playback. Tries the server-side Grok (xAI) voice API first —
+ * Narration playback. Tries the server-side ElevenLabs voice API first —
  * see src/app/api/narrate/route.ts — and falls back to the browser's Web
- * Speech API when no XAI_API_KEY is configured, or the request fails for
- * any other reason. Callers don't need to know which path was used.
+ * Speech API when no ELEVENLABS_API_KEY is configured, or the request
+ * fails for any other reason. Callers don't need to know which path was
+ * used.
  */
 
 let currentAudio: HTMLAudioElement | null = null;
@@ -32,7 +33,7 @@ function speakWithWebSpeech(
 }
 
 /** Returns true if playback actually started — false means "fall back". */
-async function speakWithGrokVoice(
+async function speakWithElevenLabs(
   text: string,
   opts?: { onStart?: () => void; onEnd?: () => void },
 ): Promise<boolean> {
@@ -83,7 +84,7 @@ export function speakNarration(
 ): void {
   stopNarration();
 
-  speakWithGrokVoice(text, opts)
+  speakWithElevenLabs(text, opts)
     .then((started) => {
       if (!started) speakWithWebSpeech(text, opts);
     })

@@ -15,6 +15,7 @@ import {
   UserRound,
 } from "lucide-react";
 import { InertNavLink } from "@/components/studio/InertNavLink";
+import { TopNav } from "@/components/studio/TopNav";
 import { cn } from "@/lib/utils";
 
 interface Project {
@@ -56,55 +57,54 @@ export default function HomePage() {
 
   return (
     <div className="lenscape-studio flex min-h-dvh flex-col bg-studio-bg-canvas font-studio-body text-studio-body-md text-studio-on-surface">
-      <header className="sticky top-0 z-50 flex h-16 shrink-0 items-center justify-between border-b border-studio-border-subtle bg-studio-surface px-4">
-        <div className="flex items-center gap-8">
-          <span className="font-studio-heading text-studio-headline-md font-bold tracking-tight text-studio-primary">
-            Lenscape
-          </span>
+      <TopNav
+        nav={
           <nav className="hidden items-center gap-6 md:flex">
             <InertNavLink label="Projects" active />
             <InertNavLink label="Assets" />
             <InertNavLink label="Analytics" />
             <InertNavLink label="Settings" />
           </nav>
-        </div>
-        <div className="flex items-center gap-4">
-          <div className="relative hidden w-64 lg:block">
-            <Search className="pointer-events-none absolute top-1/2 left-3 size-[18px] -translate-y-1/2 text-studio-text-muted" />
-            <input
-              type="text"
-              placeholder="Search projects…"
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              className="w-full rounded-studio border border-studio-border-subtle bg-studio-surface-muted py-1.5 pr-3 pl-9 font-studio-body text-studio-body-md text-studio-on-surface outline-none placeholder:text-studio-text-muted focus:border-studio-primary"
-            />
-          </div>
-          <button
-            type="button"
-            title="Notifications"
-            className="flex size-8 items-center justify-center rounded-full text-studio-text-muted transition-colors hover:bg-studio-surface-container-high hover:text-studio-on-surface"
-          >
-            <Bell className="size-[18px]" />
-          </button>
-          <button
-            type="button"
-            title="Help"
-            className="flex size-8 items-center justify-center rounded-full text-studio-text-muted transition-colors hover:bg-studio-surface-container-high hover:text-studio-on-surface"
-          >
-            <HelpCircle className="size-[18px]" />
-          </button>
-          <Link
-            href="/upload"
-            className="hidden items-center gap-2 rounded-studio bg-studio-primary px-4 py-2 font-studio-heading text-studio-label-md text-studio-on-primary transition-colors hover:bg-studio-primary/90 md:flex"
-          >
-            <Plus className="size-4" />
-            Create Tour
-          </Link>
-          <div className="ml-2 flex size-8 items-center justify-center overflow-hidden rounded-full border border-studio-border-subtle bg-studio-surface-container-highest">
-            <UserRound className="size-4 text-studio-on-surface-variant" />
-          </div>
-        </div>
-      </header>
+        }
+        actions={
+          <>
+            <div className="relative hidden w-64 lg:block">
+              <Search className="pointer-events-none absolute top-1/2 left-3 size-[18px] -translate-y-1/2 text-studio-text-muted" />
+              <input
+                type="text"
+                placeholder="Search projects…"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                className="w-full rounded-studio border border-studio-border-subtle bg-studio-surface-muted py-1.5 pr-3 pl-9 font-studio-body text-studio-body-md text-studio-on-surface outline-none placeholder:text-studio-text-muted focus:border-studio-primary"
+              />
+            </div>
+            <button
+              type="button"
+              title="Notifications"
+              className="flex size-8 items-center justify-center rounded-full text-studio-text-muted transition-colors hover:bg-studio-surface-container-high hover:text-studio-on-surface"
+            >
+              <Bell className="size-[18px]" />
+            </button>
+            <button
+              type="button"
+              title="Help"
+              className="flex size-8 items-center justify-center rounded-full text-studio-text-muted transition-colors hover:bg-studio-surface-container-high hover:text-studio-on-surface"
+            >
+              <HelpCircle className="size-[18px]" />
+            </button>
+            <Link
+              href="/upload"
+              className="hidden items-center gap-2 rounded-studio bg-studio-primary px-4 py-2 font-studio-heading text-studio-label-md text-studio-on-primary transition-colors hover:bg-studio-primary/90 md:flex"
+            >
+              <Plus className="size-4" />
+              Create Tour
+            </Link>
+            <div className="ml-2 flex size-8 items-center justify-center overflow-hidden rounded-full border border-studio-border-subtle bg-studio-surface-container-highest">
+              <UserRound className="size-4 text-studio-on-surface-variant" />
+            </div>
+          </>
+        }
+      />
 
       <main className="mx-auto flex w-full max-w-[1600px] flex-1 flex-col gap-8 p-6 lg:p-8">
         <div className="flex flex-col items-start justify-between gap-4 md:flex-row md:items-end">

@@ -42,12 +42,15 @@ function InspectorTab({
   label,
   active,
   disabled,
+  disabledReason,
   onClick,
 }: {
   icon: typeof SlidersHorizontal;
   label: string;
   active?: boolean;
   disabled?: boolean;
+  /** Tooltip shown while disabled — defaults to "Coming soon". */
+  disabledReason?: string;
   onClick?: () => void;
 }) {
   if (active) {
@@ -67,7 +70,7 @@ function InspectorTab({
       <button
         type="button"
         disabled
-        title="Coming soon"
+        title={disabledReason ?? "Coming soon"}
         className="flex flex-1 cursor-not-allowed items-center justify-center gap-2 py-2 font-studio-heading text-studio-label-sm text-studio-text-muted/60"
       >
         <Icon className="size-4" />
@@ -171,6 +174,7 @@ export function Inspector() {
           label="Animation"
           active={tab === "animation"}
           disabled={availableAnimations.length === 0}
+          disabledReason="This model has no animation clips"
           onClick={() => setTab("animation")}
         />
         <InspectorTab icon={Sparkles} label="AI Tools" disabled />

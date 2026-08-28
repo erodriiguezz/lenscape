@@ -85,7 +85,7 @@ function SidebarNavItem({
 }) {
   if (active) {
     return (
-      <div className="flex items-center gap-3 rounded-studio border-l-2 border-studio-primary bg-studio-secondary-container/20 px-3 py-2 font-studio-heading text-studio-label-md text-studio-on-primary-container">
+      <div className="flex items-center gap-3 rounded-studio border-l-2 border-studio-primary bg-studio-surface-variant px-3 py-2 font-studio-heading text-studio-label-md text-studio-primary">
         <Icon className="size-[18px] text-studio-primary" />
         {label}
       </div>

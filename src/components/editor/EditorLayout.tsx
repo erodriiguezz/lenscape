@@ -8,6 +8,7 @@ import { Inspector } from "@/components/editor/Inspector";
 import { TourStoryboard } from "@/components/editor/TourStoryboard";
 import { TourOverlay } from "@/components/presentation/TourOverlay";
 import { HotspotDescriptionPanel } from "@/components/presentation/HotspotDescriptionPanel";
+import { TopNav } from "@/components/studio/TopNav";
 import { useEditorStore } from "@/lib/store";
 import { cn, stripExtension } from "@/lib/utils";
 
@@ -33,87 +34,85 @@ export function EditorLayout() {
   const presenting = mode === "present";
 
   return (
-    <div className="lenscape-studio flex h-dvh flex-col overflow-hidden bg-studio-background font-studio-body text-studio-body-md text-studio-on-surface">
-      <nav className="z-50 flex h-14 shrink-0 items-center justify-between border-b border-studio-border-subtle bg-studio-surface px-4">
-        <div className="flex min-w-0 items-center gap-3">
-          <Link
-            href="/"
-            className="font-studio-heading text-studio-headline-lg font-bold text-studio-primary transition-opacity hover:opacity-80"
-          >
-            Lenscape
-          </Link>
-          <span className="text-studio-border-subtle" aria-hidden>
-            /
-          </span>
-          <Link
-            href="/"
-            title="Back to projects"
-            className="flex shrink-0 items-center gap-1.5 rounded-studio px-2 py-1 font-studio-heading text-studio-label-md text-studio-on-surface-variant transition-colors hover:bg-studio-surface-variant hover:text-studio-on-surface"
-          >
-            <ArrowLeft className="size-3.5" />
-            Projects
-          </Link>
-          <span className="text-studio-border-subtle" aria-hidden>
-            /
-          </span>
-          <span
-            className="truncate font-studio-heading text-studio-label-md text-studio-on-surface"
-            title={modelName}
-          >
-            {stripExtension(modelName)}
-          </span>
-        </div>
-        <div className="flex items-center gap-4">
-          <button
-            type="button"
-            title="Share"
-            className="flex items-center justify-center rounded-studio-full p-2 text-studio-on-surface-variant transition-colors hover:bg-studio-surface-variant"
-          >
-            <Share2 className="size-[18px]" />
-          </button>
-          <button
-            type="button"
-            title="Settings"
-            className="flex items-center justify-center rounded-studio-full p-2 text-studio-on-surface-variant transition-colors hover:bg-studio-surface-variant"
-          >
-            <Settings className="size-[18px]" />
-          </button>
-
-          {presenting ? (
+    <div className="lenscape-studio flex h-dvh flex-col overflow-hidden bg-studio-bg-canvas font-studio-body text-studio-body-md text-studio-on-surface">
+      <TopNav
+        nav={
+          <>
+            <span className="text-studio-border-subtle" aria-hidden>
+              /
+            </span>
+            <Link
+              href="/"
+              title="Back to projects"
+              className="flex shrink-0 items-center gap-1.5 rounded-studio px-2 py-1 font-studio-heading text-studio-label-md text-studio-on-surface-variant transition-colors hover:bg-studio-surface-variant hover:text-studio-on-surface"
+            >
+              <ArrowLeft className="size-3.5" />
+              Projects
+            </Link>
+            <span className="text-studio-border-subtle" aria-hidden>
+              /
+            </span>
+            <span
+              className="truncate font-studio-heading text-studio-label-md text-studio-on-surface"
+              title={modelName}
+            >
+              {stripExtension(modelName)}
+            </span>
+          </>
+        }
+        actions={
+          <>
             <button
               type="button"
-              onClick={() => setMode("edit")}
-              className="rounded-studio border border-studio-primary px-4 py-1.5 font-studio-heading text-studio-label-md text-studio-primary transition-colors hover:bg-studio-surface-variant"
+              title="Share"
+              className="flex items-center justify-center rounded-studio-full p-2 text-studio-on-surface-variant transition-colors hover:bg-studio-surface-variant"
             >
-              Exit preview
+              <Share2 className="size-[18px]" />
             </button>
-          ) : (
-            <>
-              <button
-                type="button"
-                onClick={playTour}
-                className="flex items-center gap-1.5 rounded-studio border border-studio-primary px-4 py-1.5 font-studio-heading text-studio-label-md text-studio-primary transition-colors hover:bg-studio-surface-variant"
-              >
-                <Play className="size-3.5" />
-                Preview
-              </button>
-              <button
-                type="button"
-                title="Publishing is coming soon"
-                disabled
-                className="cursor-not-allowed rounded-studio bg-studio-primary/40 px-4 py-1.5 font-studio-heading text-studio-label-md text-studio-on-primary/70"
-              >
-                Publish
-              </button>
-              {/* TODO: public viewer mode — publish flow to /view/[id] */}
-            </>
-          )}
+            <button
+              type="button"
+              title="Settings"
+              className="flex items-center justify-center rounded-studio-full p-2 text-studio-on-surface-variant transition-colors hover:bg-studio-surface-variant"
+            >
+              <Settings className="size-[18px]" />
+            </button>
 
-          <div className="ml-2 flex size-8 items-center justify-center overflow-hidden rounded-full border border-studio-border-subtle bg-studio-surface-variant">
-            <UserRound className="size-4 text-studio-on-surface-variant" />
-          </div>
-        </div>
-      </nav>
+            {presenting ? (
+              <button
+                type="button"
+                onClick={() => setMode("edit")}
+                className="rounded-studio border border-studio-primary px-4 py-1.5 font-studio-heading text-studio-label-md text-studio-primary transition-colors hover:bg-studio-surface-variant"
+              >
+                Exit preview
+              </button>
+            ) : (
+              <>
+                <button
+                  type="button"
+                  onClick={playTour}
+                  className="flex items-center gap-1.5 rounded-studio border border-studio-primary px-4 py-1.5 font-studio-heading text-studio-label-md text-studio-primary transition-colors hover:bg-studio-surface-variant"
+                >
+                  <Play className="size-3.5" />
+                  Preview
+                </button>
+                <button
+                  type="button"
+                  title="Publishing is coming soon"
+                  disabled
+                  className="cursor-not-allowed rounded-studio bg-studio-primary/40 px-4 py-1.5 font-studio-heading text-studio-label-md text-studio-on-primary/70"
+                >
+                  Publish
+                </button>
+                {/* TODO: public viewer mode — publish flow to /view/[id] */}
+              </>
+            )}
+
+            <div className="ml-2 flex size-8 items-center justify-center overflow-hidden rounded-full border border-studio-border-subtle bg-studio-surface-variant">
+              <UserRound className="size-4 text-studio-on-surface-variant" />
+            </div>
+          </>
+        }
+      />
 
       <div className={cn("flex min-h-0 flex-1")}>
         {!presenting && <NodeTree />}
