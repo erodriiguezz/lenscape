@@ -14,7 +14,7 @@ import {
 import { useMemo, useState } from "react";
 import type { SceneNode } from "@/lib/scene-graph";
 import { useEditorStore } from "@/lib/store";
-import { cn } from "@/lib/utils";
+import { cn, stripExtension } from "@/lib/utils";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
 function countNodes(node: SceneNode): number {
@@ -121,8 +121,11 @@ export function NodeTree() {
           <Boxes className="size-4 text-studio-primary" />
         </div>
         <div className="min-w-0">
-          <h2 className="truncate font-studio-heading text-studio-headline-md text-studio-on-surface">
-            {modelName}
+          <h2
+            className="truncate font-studio-heading text-studio-headline-md text-studio-on-surface"
+            title={modelName}
+          >
+            {stripExtension(modelName)}
           </h2>
           <p className="font-studio-heading text-studio-label-sm text-studio-text-muted">
             {sceneGraph ? `${nodeCount} nodes` : "Loading…"}

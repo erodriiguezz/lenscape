@@ -214,21 +214,24 @@ function ProjectThumbnail({ project }: { project: Project }) {
 
 function ProjectCard({ project }: { project: Project }) {
   return (
-    <div className="group relative flex flex-col overflow-hidden rounded-studio-lg border border-studio-border-subtle bg-studio-surface-container transition-colors duration-300 hover:border-studio-outline-variant">
+    <Link
+      href={project.href}
+      className="group relative flex flex-col overflow-hidden rounded-studio-lg border border-studio-border-subtle bg-studio-surface-container transition-colors duration-300 hover:border-studio-outline-variant"
+    >
       <div className="relative">
         <ProjectThumbnail project={project} />
         <div className="absolute top-3 left-3 z-20">
           <StatusBadge status={project.status} />
         </div>
-        <Link
-          href={project.href}
-          title="Edit"
-          className="absolute top-3 right-3 z-20 flex size-8 items-center justify-center rounded-studio border border-studio-border-subtle bg-studio-surface-overlay text-studio-text-muted opacity-0 backdrop-blur-md transition-opacity hover:text-studio-primary group-hover:opacity-100"
+        {/* Decorative — the whole card is already the link. */}
+        <div
+          aria-hidden
+          className="absolute top-3 right-3 z-20 flex size-8 items-center justify-center rounded-studio border border-studio-border-subtle bg-studio-surface-overlay text-studio-text-muted opacity-0 backdrop-blur-md transition-opacity group-hover:opacity-100 group-hover:text-studio-primary"
         >
           <Pencil className="size-[18px]" />
-        </Link>
+        </div>
       </div>
-      <Link href={project.href} className="flex flex-col gap-3 p-4">
+      <div className="flex flex-col gap-3 p-4">
         <h3 className="truncate pr-4 font-studio-heading text-studio-headline-md text-studio-on-surface transition-colors group-hover:text-studio-primary">
           {project.name}
         </h3>
@@ -245,8 +248,8 @@ function ProjectCard({ project }: { project: Project }) {
             You
           </div>
         </div>
-      </Link>
-    </div>
+      </div>
+    </Link>
   );
 }
 

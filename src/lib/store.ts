@@ -39,6 +39,17 @@ interface EditorState {
    * Hotspot focus can still pull a related part out when this is 0.
    */
   explodeAmount: number;
+  /**
+   * Node name isolated for its own explode, independent of the global
+   * dial and of any hotspot focus. Set from the Inspector when a plain
+   * mesh (not a hotspot) is selected.
+   */
+  isolatedExplodeNodeName: string | null;
+
+  /** Animation clip names available on the currently loaded model, if any. */
+  availableAnimations: string[];
+  /** Clip name currently playing, or null if nothing is playing. */
+  playingAnimation: string | null;
 
   setSceneGraph: (graph: SceneNode | null) => void;
   selectNode: (uuid: string | null) => void;
@@ -53,6 +64,12 @@ interface EditorState {
   ) => void;
   setExplodeAmount: (amount: number) => void;
   toggleExplode: () => void;
+  /** Toggle isolated explode for one node — passing the already-isolated node clears it. */
+  toggleIsolatedExplode: (nodeName: string) => void;
+
+  setAvailableAnimations: (names: string[]) => void;
+  playAnimation: (name: string) => void;
+  stopAnimation: () => void;
 
   setMode: (mode: AppMode) => void;
   /** Open a hotspot: show description panel, focus camera, optionally speak description */
@@ -119,6 +136,10 @@ export const useEditorStore = create<EditorState>((set, get) => ({
   autoAdvance: true,
 
   explodeAmount: 0,
+  isolatedExplodeNodeName: null,
+
+  availableAnimations: [],
+  playingAnimation: null,
 
   setSceneGraph: (graph) => set({ sceneGraph: graph }),
 
@@ -167,6 +188,18 @@ export const useEditorStore = create<EditorState>((set, get) => ({
     set((state) => ({
       explodeAmount: state.explodeAmount > 0.5 ? 0 : 1,
     })),
+
+  toggleIsolatedExplode: (nodeName) =>
+    set((state) => ({
+      isolatedExplodeNodeName:
+        state.isolatedExplodeNodeName === nodeName ? null : nodeName,
+    })),
+
+  setAvailableAnimations: (names) => set({ availableAnimations: names }),
+
+  playAnimation: (name) => set({ playingAnimation: name }),
+
+  stopAnimation: () => set({ playingAnimation: null }),
 
   setMode: (mode) => {
     if (mode === "edit") {

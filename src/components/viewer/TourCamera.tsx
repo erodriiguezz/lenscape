@@ -15,14 +15,23 @@ const _camGoal = new THREE.Vector3();
 const _targetGoal = new THREE.Vector3();
 
 /**
- * Animates the orbit camera to frame the active tour hotspot.
+ * Flies the orbit camera to frame the active tour hotspot, then hands
+ * control back to OrbitControls so the user can freely rotate/zoom/pan
+ * around it instead of being locked to a fixed framing every frame.
+ *
+ * Also anchors the orbit pivot to the model's real center as soon as it
+ * loads — otherwise OrbitControls' default (0,0,0) target sits far below
+ * the model until drei's <Bounds> finishes its own ~1s fit-in animation,
+ * and an early drag orbits around that distant, wrong pivot instead of
+ * spinning around the model.
+ *
  * TODO: storyboard camera bookmarks — persist exact lookAt + position per step.
  */
 export function TourCamera() {
   const hotspot = useCurrentHotspot();
   const mode = useEditorStore((s) => s.mode);
   const hotspotPanelOpen = useEditorStore((s) => s.hotspotPanelOpen);
-  const explodeAmount = useEditorStore((s) => s.explodeAmount);
+  const sceneGraph = useEditorStore((s) => s.sceneGraph);
   const { camera, scene, controls } = useThree();
   const orbit = controls as OrbitControlsImpl | null;
 
@@ -30,15 +39,14 @@ export function TourCamera() {
     cam: new THREE.Vector3().copy(camera.position),
     target: new THREE.Vector3(0, 137, 0),
     active: false,
-    nodeName: null as string | null,
   });
+  /** Set once the user grabs the controls — releases the auto-frame lock. */
+  const userTookControl = useRef(false);
 
-  const updateGoals = () => {
-    const shouldFocus =
-      hotspot && (mode === "present" || hotspotPanelOpen);
+  const computeGoal = () => {
+    const shouldFocus = hotspot && (mode === "present" || hotspotPanelOpen);
     if (!shouldFocus || !hotspot) {
       goals.current.active = false;
-      goals.current.nodeName = null;
       return false;
     }
 
@@ -63,20 +71,47 @@ export function TourCamera() {
     goals.current.cam.copy(_camGoal);
     goals.current.target.copy(_targetGoal);
     goals.current.active = true;
-    goals.current.nodeName = hotspot.targetNodeName;
     return true;
   };
 
+  // A newly focused hotspot re-engages the fly-to, even if the user had
+  // taken manual control of the previous one.
   useEffect(() => {
-    updateGoals();
-  }, [hotspot, mode, hotspotPanelOpen, scene, camera, explodeAmount]);
+    userTookControl.current = false;
+    computeGoal();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hotspot?.id, mode, hotspotPanelOpen]);
+
+  // Snap the orbit pivot to the model's real center the moment it loads,
+  // so a drag that starts before <Bounds> finishes fitting still orbits
+  // around the model rather than the stale (0,0,0) default.
+  useEffect(() => {
+    if (!sceneGraph || !orbit || goals.current.active) return;
+    _box.setFromObject(scene);
+    if (_box.isEmpty()) return;
+    _box.getCenter(_center);
+    orbit.target.copy(_center);
+    orbit.update();
+  }, [sceneGraph, scene, orbit]);
+
+  // Release the auto-frame lock the instant the user drags, zooms, or pans.
+  useEffect(() => {
+    if (!orbit) return;
+    const release = () => {
+      userTookControl.current = true;
+    };
+    orbit.addEventListener("start", release);
+    return () => orbit.removeEventListener("start", release);
+  }, [orbit]);
 
   useFrame((_, delta) => {
-    // Follow parts as they explode / assemble while a hotspot is focused
+    // Keep the goal fresh while focused, so a still-exploding part stays
+    // framed correctly — but only *apply* it if the user hasn't taken over.
     if (hotspot && (mode === "present" || hotspotPanelOpen)) {
-      updateGoals();
+      computeGoal();
     }
-    if (!goals.current.active || !orbit) return;
+    if (!goals.current.active || !orbit || userTookControl.current) return;
+
     const t = 1 - Math.exp(-delta * 2.4);
     camera.position.lerp(goals.current.cam, t);
     orbit.target.lerp(goals.current.target, t);

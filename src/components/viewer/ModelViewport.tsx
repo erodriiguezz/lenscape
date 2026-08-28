@@ -1,13 +1,33 @@
 "use client";
 
-import { Suspense } from "react";
+import { Suspense, useEffect } from "react";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls, Bounds, Environment } from "@react-three/drei";
 import { Model } from "@/components/viewer/Model";
 import { TourCamera } from "@/components/viewer/TourCamera";
+import { KeyboardCameraControls } from "@/components/viewer/KeyboardCameraControls";
 import { HotspotMarkers } from "@/components/viewer/HotspotMarkers";
 import { ExplodeControls } from "@/components/viewer/ExplodeControls";
 import { useEditorStore } from "@/lib/store";
+import { trackPointerDown, trackPointerMove } from "@/lib/pointer-drag";
+
+/**
+ * Tracks pointer movement globally so click handlers (mesh selection,
+ * hotspot pins) can tell a drag-release apart from a real click.
+ * See src/lib/pointer-drag.ts for why this can't be scoped to the canvas.
+ */
+function useDragGuard() {
+  useEffect(() => {
+    const onDown = (e: PointerEvent) => trackPointerDown(e.clientX, e.clientY);
+    const onMove = (e: PointerEvent) => trackPointerMove(e.clientX, e.clientY);
+    window.addEventListener("pointerdown", onDown);
+    window.addEventListener("pointermove", onMove);
+    return () => {
+      window.removeEventListener("pointerdown", onDown);
+      window.removeEventListener("pointermove", onMove);
+    };
+  }, []);
+}
 
 function LoaderFallback() {
   return (
@@ -24,6 +44,8 @@ export function ModelViewport() {
   const mode = useEditorStore((s) => s.mode);
   const hotspotPanelOpen = useEditorStore((s) => s.hotspotPanelOpen);
   const useBounds = mode === "edit" && !hotspotPanelOpen;
+
+  useDragGuard();
 
   return (
     <div className="relative h-full w-full bg-studio-bg-canvas">
@@ -48,6 +70,7 @@ export function ModelViewport() {
           <Environment preset="city" />
         </Suspense>
         <TourCamera />
+        <KeyboardCameraControls />
         <OrbitControls
           makeDefault
           enableDamping

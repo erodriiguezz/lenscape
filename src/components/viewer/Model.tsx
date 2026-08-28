@@ -1,13 +1,14 @@
 "use client";
 
 import { useEffect, useMemo } from "react";
-import { useGLTF } from "@react-three/drei";
+import { useAnimations, useGLTF } from "@react-three/drei";
 import { useThree } from "@react-three/fiber";
 import type { ThreeEvent } from "@react-three/fiber";
 import * as THREE from "three";
 import { useExplodeAnimation } from "@/components/viewer/useExplodeAnimation";
 import { buildSceneGraph } from "@/lib/scene-graph";
 import { useCurrentHotspot, useEditorStore } from "@/lib/store";
+import { consumeWasDrag } from "@/lib/pointer-drag";
 
 const SELECT_EMISSIVE = new THREE.Color("#3b82f6");
 const FOCUS_EMISSIVE = new THREE.Color("#38bdf8");
@@ -96,7 +97,7 @@ function meshMaterials(mesh: THREE.Mesh): THREE.Material[] {
 }
 
 export function Model({ url }: { url: string }) {
-  const { scene } = useGLTF(url);
+  const { scene, animations } = useGLTF(url);
   const { invalidate } = useThree();
   const setSceneGraph = useEditorStore((s) => s.setSceneGraph);
   const selectNode = useEditorStore((s) => s.selectNode);
@@ -104,10 +105,33 @@ export function Model({ url }: { url: string }) {
   const mode = useEditorStore((s) => s.mode);
   const hotspot = useCurrentHotspot();
   const hotspotPanelOpen = useEditorStore((s) => s.hotspotPanelOpen);
+  const setAvailableAnimations = useEditorStore(
+    (s) => s.setAvailableAnimations,
+  );
+  const playingAnimation = useEditorStore((s) => s.playingAnimation);
 
   const root = useMemo(() => scene.clone(true), [scene]);
 
   useExplodeAnimation(root);
+
+  const { actions, names: animationNames } = useAnimations(animations, root);
+
+  useEffect(() => {
+    setAvailableAnimations(animationNames);
+    return () => setAvailableAnimations([]);
+  }, [animationNames, setAvailableAnimations]);
+
+  // Play whichever clip the Inspector's Animation tab requested; stop the rest.
+  useEffect(() => {
+    for (const [name, action] of Object.entries(actions)) {
+      if (!action) continue;
+      if (name === playingAnimation) {
+        action.reset().fadeIn(0.3).play();
+      } else {
+        action.fadeOut(0.3);
+      }
+    }
+  }, [actions, playingAnimation]);
 
   useEffect(() => {
     const graph = buildSceneGraph(root);
@@ -164,6 +188,8 @@ export function Model({ url }: { url: string }) {
 
   const handleClick = (event: ThreeEvent<MouseEvent>) => {
     event.stopPropagation();
+    // A rotate-drag that releases over a mesh shouldn't select it.
+    if (consumeWasDrag()) return;
     let obj: THREE.Object3D | null = event.object;
     while (obj && !obj.name && obj.parent && obj.parent !== root.parent) {
       obj = obj.parent;

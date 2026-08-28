@@ -99,13 +99,28 @@ export function useExplodeAnimation(root: THREE.Object3D) {
     return runtimes;
   }, [root]);
 
+  const isolatedExplodeNodeName = useEditorStore(
+    (s) => s.isolatedExplodeNodeName,
+  );
+
   const focusedIds = useMemo(() => {
+    const ids = new Set<string>();
+
     const focusing = mode === "present" || hotspotPanelOpen;
-    if (!focusing || !hotspot) return new Set<string>();
-    const names = new Set<string>([hotspot.targetNodeName]);
-    hotspot.highlightNodeNames?.forEach((n) => names.add(n));
-    return resolveFocusedPartIds(names);
-  }, [mode, hotspotPanelOpen, hotspot]);
+    if (focusing && hotspot) {
+      const names = new Set<string>([hotspot.targetNodeName]);
+      hotspot.highlightNodeNames?.forEach((n) => names.add(n));
+      resolveFocusedPartIds(names).forEach((id) => ids.add(id));
+    }
+
+    if (isolatedExplodeNodeName) {
+      resolveFocusedPartIds(new Set([isolatedExplodeNodeName])).forEach((id) =>
+        ids.add(id),
+      );
+    }
+
+    return ids;
+  }, [mode, hotspotPanelOpen, hotspot, isolatedExplodeNodeName]);
 
   const focusedRef = useRef(focusedIds);
   const amountRef = useRef(explodeAmount);

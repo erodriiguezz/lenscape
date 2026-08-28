@@ -1,15 +1,15 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { Play, Settings, Share2, UserRound } from "lucide-react";
+import Link from "next/link";
+import { ArrowLeft, Play, Settings, Share2, UserRound } from "lucide-react";
 import { NodeTree } from "@/components/editor/NodeTree";
 import { Inspector } from "@/components/editor/Inspector";
 import { TourStoryboard } from "@/components/editor/TourStoryboard";
 import { TourOverlay } from "@/components/presentation/TourOverlay";
 import { HotspotDescriptionPanel } from "@/components/presentation/HotspotDescriptionPanel";
-import { InertNavLink } from "@/components/studio/InertNavLink";
 import { useEditorStore } from "@/lib/store";
-import { cn } from "@/lib/utils";
+import { cn, stripExtension } from "@/lib/utils";
 
 const ModelViewport = dynamic(
   () =>
@@ -28,21 +28,40 @@ export function EditorLayout() {
   const mode = useEditorStore((s) => s.mode);
   const playTour = useEditorStore((s) => s.playTour);
   const setMode = useEditorStore((s) => s.setMode);
+  const modelName = useEditorStore((s) => s.model.name);
 
   const presenting = mode === "present";
 
   return (
     <div className="lenscape-studio flex h-dvh flex-col overflow-hidden bg-studio-background font-studio-body text-studio-body-md text-studio-on-surface">
       <nav className="z-50 flex h-14 shrink-0 items-center justify-between border-b border-studio-border-subtle bg-studio-surface px-4">
-        <div className="flex items-center gap-6">
-          <span className="font-studio-heading text-studio-headline-lg font-bold text-studio-primary">
+        <div className="flex min-w-0 items-center gap-3">
+          <Link
+            href="/"
+            className="font-studio-heading text-studio-headline-lg font-bold text-studio-primary transition-opacity hover:opacity-80"
+          >
             Lenscape
+          </Link>
+          <span className="text-studio-border-subtle" aria-hidden>
+            /
           </span>
-          <div className="hidden items-center gap-4 md:flex">
-            <InertNavLink label="Scene" active />
-            <InertNavLink label="Assets" />
-            <InertNavLink label="Collaborate" />
-          </div>
+          <Link
+            href="/"
+            title="Back to projects"
+            className="flex shrink-0 items-center gap-1.5 rounded-studio px-2 py-1 font-studio-heading text-studio-label-md text-studio-on-surface-variant transition-colors hover:bg-studio-surface-variant hover:text-studio-on-surface"
+          >
+            <ArrowLeft className="size-3.5" />
+            Projects
+          </Link>
+          <span className="text-studio-border-subtle" aria-hidden>
+            /
+          </span>
+          <span
+            className="truncate font-studio-heading text-studio-label-md text-studio-on-surface"
+            title={modelName}
+          >
+            {stripExtension(modelName)}
+          </span>
         </div>
         <div className="flex items-center gap-4">
           <button
