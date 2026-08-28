@@ -11,11 +11,34 @@
  */
 
 const ELEVENLABS_TTS_URL = "https://api.elevenlabs.io/v1/text-to-speech";
+const ELEVENLABS_VOICES_URL = "https://api.elevenlabs.io/v2/voices";
 const MAX_TEXT_LENGTH = 5_000;
 const DEFAULT_MODEL_ID = "eleven_multilingual_v2";
-// "Rachel" — one of ElevenLabs' default premade voices, available on every
-// plan. Override with ELEVENLABS_VOICE_ID once you've picked your own.
-const DEFAULT_VOICE_ID = "21m00Tcm4TlvDq8ikWAM";
+
+// Which voices are usable via the API depends on the account's plan —
+// shared "voice library" voices (e.g. the well-known "Rachel" preset)
+// return 402 payment_required on free-tier keys. Resolve a voice the
+// *current* key can actually use instead of hardcoding one, and cache it
+// per server process so we're not calling /v2/voices on every request.
+let cachedVoiceId: string | null | undefined;
+
+async function resolveAccountVoiceId(apiKey: string): Promise<string | null> {
+  if (cachedVoiceId !== undefined) return cachedVoiceId;
+  try {
+    const res = await fetch(`${ELEVENLABS_VOICES_URL}?page_size=1`, {
+      headers: { "xi-api-key": apiKey },
+    });
+    if (!res.ok) {
+      cachedVoiceId = null;
+      return null;
+    }
+    const data = (await res.json()) as { voices?: { voice_id?: string }[] };
+    cachedVoiceId = data.voices?.[0]?.voice_id ?? null;
+  } catch {
+    cachedVoiceId = null;
+  }
+  return cachedVoiceId;
+}
 
 export async function POST(request: Request) {
   const apiKey = process.env.ELEVENLABS_API_KEY;
@@ -43,10 +66,21 @@ export async function POST(request: Request) {
       { status: 400 },
     );
   }
+
   const voiceId =
     (typeof body.voiceId === "string" && body.voiceId) ||
     process.env.ELEVENLABS_VOICE_ID ||
-    DEFAULT_VOICE_ID;
+    (await resolveAccountVoiceId(apiKey));
+
+  if (!voiceId) {
+    return Response.json(
+      {
+        error:
+          "No usable ElevenLabs voice found on this account. Set ELEVENLABS_VOICE_ID to a voice_id from your ElevenLabs dashboard.",
+      },
+      { status: 502 },
+    );
+  }
 
   let upstream: Response;
   try {
