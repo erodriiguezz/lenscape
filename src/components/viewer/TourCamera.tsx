@@ -19,11 +19,10 @@ const _targetGoal = new THREE.Vector3();
  * control back to OrbitControls so the user can freely rotate/zoom/pan
  * around it instead of being locked to a fixed framing every frame.
  *
- * Also anchors the orbit pivot to the model's real center as soon as it
- * loads — otherwise OrbitControls' default (0,0,0) target sits far below
- * the model until drei's <Bounds> finishes its own ~1s fit-in animation,
- * and an early drag orbits around that distant, wrong pivot instead of
- * spinning around the model.
+ * The idle/whole-model view is owned entirely by drei's <Bounds> (see
+ * ModelViewport) — this component only takes over once a hotspot is
+ * focused, and steps out of the way completely otherwise so it can't
+ * fight Bounds' own fit-in animation.
  *
  * TODO: storyboard camera bookmarks — persist exact lookAt + position per step.
  */
@@ -31,7 +30,6 @@ export function TourCamera() {
   const hotspot = useCurrentHotspot();
   const mode = useEditorStore((s) => s.mode);
   const hotspotPanelOpen = useEditorStore((s) => s.hotspotPanelOpen);
-  const sceneGraph = useEditorStore((s) => s.sceneGraph);
   const { camera, scene, controls } = useThree();
   const orbit = controls as OrbitControlsImpl | null;
 
@@ -81,18 +79,6 @@ export function TourCamera() {
     computeGoal();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hotspot?.id, mode, hotspotPanelOpen]);
-
-  // Snap the orbit pivot to the model's real center the moment it loads,
-  // so a drag that starts before <Bounds> finishes fitting still orbits
-  // around the model rather than the stale (0,0,0) default.
-  useEffect(() => {
-    if (!sceneGraph || !orbit || goals.current.active) return;
-    _box.setFromObject(scene);
-    if (_box.isEmpty()) return;
-    _box.getCenter(_center);
-    orbit.target.copy(_center);
-    orbit.update();
-  }, [sceneGraph, scene, orbit]);
 
   // Release the auto-frame lock the instant the user drags, zooms, or pans.
   useEffect(() => {

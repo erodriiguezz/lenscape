@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useEffect } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls, Bounds, Environment } from "@react-three/drei";
 import { Model } from "@/components/viewer/Model";
@@ -29,6 +29,12 @@ function useDragGuard() {
   }, []);
 }
 
+// drei's <Bounds> defaults to a 1s fit-in animation (maxDuration). Block
+// orbit input for slightly longer than that whenever it (re)mounts, so a
+// drag can't start mid-animation and fight it for the camera — that race
+// is what made the model "jump" between framings instead of settling once.
+const BOUNDS_FIT_MS = 1100;
+
 function LoaderFallback() {
   return (
     <mesh>
@@ -46,6 +52,22 @@ export function ModelViewport() {
   const useBounds = mode === "edit" && !hotspotPanelOpen;
 
   useDragGuard();
+
+  // Adjust state during render when `useBounds` newly turns on, per React's
+  // pattern for deriving state from a prop change — avoids the extra
+  // render an effect-based setState would otherwise add.
+  const [prevUseBounds, setPrevUseBounds] = useState(useBounds);
+  const [orbitEnabled, setOrbitEnabled] = useState(true);
+  if (useBounds !== prevUseBounds) {
+    setPrevUseBounds(useBounds);
+    if (useBounds) setOrbitEnabled(false);
+  }
+
+  useEffect(() => {
+    if (orbitEnabled) return;
+    const timer = setTimeout(() => setOrbitEnabled(true), BOUNDS_FIT_MS);
+    return () => clearTimeout(timer);
+  }, [orbitEnabled]);
 
   return (
     <div className="relative h-full w-full bg-studio-bg-canvas">
@@ -73,6 +95,7 @@ export function ModelViewport() {
         <KeyboardCameraControls />
         <OrbitControls
           makeDefault
+          enabled={orbitEnabled}
           enableDamping
           dampingFactor={0.08}
           minDistance={0.5}

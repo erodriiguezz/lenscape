@@ -98,7 +98,10 @@ export function KeyboardCameraControls() {
       wasMoving.current = false;
       return;
     }
-    if (!orbit) return;
+    // Respect the same disabled window OrbitControls itself uses (e.g.
+    // while <Bounds> is mid fit-in animation) — otherwise WASD can still
+    // fight it even though mouse/wheel input can't.
+    if (!orbit || !orbit.enabled) return;
 
     const distance = Math.max(camera.position.distanceTo(orbit.target), 1);
     const speed = distance * MOVE_SPEED * delta;
