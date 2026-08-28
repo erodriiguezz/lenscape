@@ -43,7 +43,14 @@ interface EditorState {
   setSceneGraph: (graph: SceneNode | null) => void;
   selectNode: (uuid: string | null) => void;
   setDescription: (uuid: string, description: string) => void;
+  updateHotspotTitle: (hotspotId: string, title: string) => void;
   updateHotspotDescription: (hotspotId: string, description: string) => void;
+  updateHotspotNarration: (hotspotId: string, narration: string) => void;
+  updateHotspotCameraDirection: (
+    hotspotId: string,
+    axis: "x" | "y" | "z",
+    value: number,
+  ) => void;
   setExplodeAmount: (amount: number) => void;
   toggleExplode: () => void;
 
@@ -74,7 +81,7 @@ function speakHotspotDescription(
   set: (partial: Partial<EditorState>) => void,
   get: () => EditorState,
 ) {
-  speakNarration(hotspot.description, {
+  speakNarration(hotspot.narration ?? hotspot.description, {
     onStart: () => set({ isNarrating: true }),
     onEnd: () => {
       set({ isNarrating: false });
@@ -122,11 +129,35 @@ export const useEditorStore = create<EditorState>((set, get) => ({
       descriptions: { ...state.descriptions, [uuid]: description },
     })),
 
+  updateHotspotTitle: (hotspotId, title) =>
+    set((state) => ({
+      hotspots: state.hotspots.map((h) =>
+        h.id === hotspotId ? { ...h, title } : h,
+      ),
+    })),
+
   updateHotspotDescription: (hotspotId, description) =>
     set((state) => ({
       hotspots: state.hotspots.map((h) =>
         h.id === hotspotId ? { ...h, description } : h,
       ),
+    })),
+
+  updateHotspotNarration: (hotspotId, narration) =>
+    set((state) => ({
+      hotspots: state.hotspots.map((h) =>
+        h.id === hotspotId ? { ...h, narration } : h,
+      ),
+    })),
+
+  updateHotspotCameraDirection: (hotspotId, axis, value) =>
+    set((state) => ({
+      hotspots: state.hotspots.map((h) => {
+        if (h.id !== hotspotId) return h;
+        const next: [number, number, number] = [...h.cameraDirection];
+        next[axis === "x" ? 0 : axis === "y" ? 1 : 2] = value;
+        return { ...h, cameraDirection: next };
+      }),
     })),
 
   setExplodeAmount: (amount) =>

@@ -11,10 +11,15 @@ export interface HotspotDefinition {
   /** Extra node names to highlight with the target (e.g. group parts) */
   highlightNodeNames?: string[];
   /**
-   * Full description — shown when the hotspot is opened, and spoken by narration.
-   * Editable in the editor; this is the source of truth for TTS.
+   * Full description — shown when the hotspot is opened.
+   * Editable in the editor.
    */
   description: string;
+  /**
+   * Narration script spoken by TTS. Optional — falls back to `description`
+   * when unset, so existing hotspots keep working without a separate script.
+   */
+  narration?: string;
   /** Shorter blurb for cards / lists */
   summary: string;
   /**

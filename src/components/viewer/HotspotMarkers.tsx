@@ -66,10 +66,10 @@ function HotspotMarker({
             openHotspot(index, { speak: mode === "present" });
           }}
           className={cn(
-            "flex size-7 items-center justify-center rounded-full border text-xs font-semibold shadow-lg transition-transform",
+            "flex size-8 items-center justify-center rounded-full border font-studio-heading text-studio-label-sm shadow-lg backdrop-blur-md transition-transform",
             active
-              ? "scale-110 border-sky-300 bg-sky-500 text-white"
-              : "border-white/40 bg-neutral-900/80 text-white hover:scale-105 hover:bg-neutral-800",
+              ? "scale-110 border-studio-primary bg-studio-primary-container text-studio-on-primary-container shadow-[0_0_12px_rgba(208,188,255,0.4)]"
+              : "border-studio-border-subtle bg-studio-surface-overlay text-studio-on-surface hover:scale-105 hover:border-studio-primary",
           )}
         >
           {index + 1}

@@ -128,3 +128,254 @@
     @apply font-sans;
   }
 }
+
+/* ------------------------------------------------------------------ */
+/* Lenscape Studio — "Lumina Pro" dark theme for the 3D editor and the */
+/* model ingestion flow (upload / processing). Scoped under a class   */
+/* rather than :root/.dark so the rest of the app keeps the default   */
+/* shadcn light/dark theme untouched.                                 */
+/* ------------------------------------------------------------------ */
+.lenscape-studio {
+  color-scheme: dark;
+
+  --studio-surface: #131313;
+  --studio-surface-dim: #131313;
+  --studio-surface-bright: #3a3939;
+  --studio-surface-container-lowest: #0e0e0e;
+  --studio-surface-container-low: #1c1b1b;
+  --studio-surface-container: #201f1f;
+  --studio-surface-container-high: #2a2a2a;
+  --studio-surface-container-highest: #353534;
+  --studio-surface-variant: #353534;
+  --studio-surface-muted: #171717;
+  --studio-surface-overlay: rgba(23, 23, 23, 0.8);
+  --studio-surface-tint: #d0bcff;
+  --studio-bg-canvas: #050505;
+
+  --studio-on-surface: #e5e2e1;
+  --studio-on-surface-variant: #cbc3d7;
+  --studio-on-background: #e5e2e1;
+  --studio-inverse-surface: #e5e2e1;
+  --studio-inverse-on-surface: #313030;
+
+  --studio-outline: #958ea0;
+  --studio-outline-variant: #494454;
+  --studio-border-subtle: rgba(255, 255, 255, 0.1);
+
+  --studio-primary: #d0bcff;
+  --studio-on-primary: #3c0091;
+  --studio-primary-container: #a078ff;
+  --studio-on-primary-container: #340080;
+  --studio-inverse-primary: #6d3bd7;
+  --studio-primary-fixed: #e9ddff;
+  --studio-primary-fixed-dim: #d0bcff;
+  --studio-on-primary-fixed: #23005c;
+  --studio-on-primary-fixed-variant: #5516be;
+
+  --studio-secondary: #adc6ff;
+  --studio-on-secondary: #002e6a;
+  --studio-secondary-container: #0566d9;
+  --studio-on-secondary-container: #e6ecff;
+  --studio-secondary-fixed: #d8e2ff;
+  --studio-secondary-fixed-dim: #adc6ff;
+  --studio-on-secondary-fixed: #001a42;
+  --studio-on-secondary-fixed-variant: #004395;
+
+  --studio-tertiary: #4edea3;
+  --studio-on-tertiary: #003824;
+  --studio-tertiary-container: #00a572;
+  --studio-on-tertiary-container: #00311f;
+  --studio-tertiary-fixed: #6ffbbe;
+  --studio-tertiary-fixed-dim: #4edea3;
+  --studio-on-tertiary-fixed: #002113;
+  --studio-on-tertiary-fixed-variant: #005236;
+
+  --studio-error: #ffb4ab;
+  --studio-on-error: #690005;
+  --studio-error-container: #93000a;
+  --studio-on-error-container: #ffdad6;
+  --studio-destructive: #ef4444;
+
+  --studio-text-high-contrast: #f5f5f5;
+  --studio-text-muted: #a3a3a3;
+  --studio-text-functional: #737373;
+}
+
+@theme inline {
+  --color-studio-surface: var(--studio-surface);
+  --color-studio-surface-dim: var(--studio-surface-dim);
+  --color-studio-surface-bright: var(--studio-surface-bright);
+  --color-studio-surface-container-lowest: var(
+    --studio-surface-container-lowest
+  );
+  --color-studio-surface-container-low: var(--studio-surface-container-low);
+  --color-studio-surface-container: var(--studio-surface-container);
+  --color-studio-surface-container-high: var(--studio-surface-container-high);
+  --color-studio-surface-container-highest: var(
+    --studio-surface-container-highest
+  );
+  --color-studio-surface-variant: var(--studio-surface-variant);
+  --color-studio-surface-muted: var(--studio-surface-muted);
+  --color-studio-surface-overlay: var(--studio-surface-overlay);
+  --color-studio-surface-tint: var(--studio-surface-tint);
+  --color-studio-bg-canvas: var(--studio-bg-canvas);
+
+  --color-studio-on-surface: var(--studio-on-surface);
+  --color-studio-on-surface-variant: var(--studio-on-surface-variant);
+  --color-studio-on-background: var(--studio-on-background);
+  --color-studio-inverse-surface: var(--studio-inverse-surface);
+  --color-studio-inverse-on-surface: var(--studio-inverse-on-surface);
+
+  --color-studio-outline: var(--studio-outline);
+  --color-studio-outline-variant: var(--studio-outline-variant);
+  --color-studio-border-subtle: var(--studio-border-subtle);
+
+  --color-studio-primary: var(--studio-primary);
+  --color-studio-on-primary: var(--studio-on-primary);
+  --color-studio-primary-container: var(--studio-primary-container);
+  --color-studio-on-primary-container: var(--studio-on-primary-container);
+  --color-studio-inverse-primary: var(--studio-inverse-primary);
+  --color-studio-primary-fixed: var(--studio-primary-fixed);
+  --color-studio-primary-fixed-dim: var(--studio-primary-fixed-dim);
+  --color-studio-on-primary-fixed: var(--studio-on-primary-fixed);
+  --color-studio-on-primary-fixed-variant: var(
+    --studio-on-primary-fixed-variant
+  );
+
+  --color-studio-secondary: var(--studio-secondary);
+  --color-studio-on-secondary: var(--studio-on-secondary);
+  --color-studio-secondary-container: var(--studio-secondary-container);
+  --color-studio-on-secondary-container: var(--studio-on-secondary-container);
+  --color-studio-secondary-fixed: var(--studio-secondary-fixed);
+  --color-studio-secondary-fixed-dim: var(--studio-secondary-fixed-dim);
+  --color-studio-on-secondary-fixed: var(--studio-on-secondary-fixed);
+  --color-studio-on-secondary-fixed-variant: var(
+    --studio-on-secondary-fixed-variant
+  );
+
+  --color-studio-tertiary: var(--studio-tertiary);
+  --color-studio-on-tertiary: var(--studio-on-tertiary);
+  --color-studio-tertiary-container: var(--studio-tertiary-container);
+  --color-studio-on-tertiary-container: var(--studio-on-tertiary-container);
+  --color-studio-tertiary-fixed: var(--studio-tertiary-fixed);
+  --color-studio-tertiary-fixed-dim: var(--studio-tertiary-fixed-dim);
+  --color-studio-on-tertiary-fixed: var(--studio-on-tertiary-fixed);
+  --color-studio-on-tertiary-fixed-variant: var(
+    --studio-on-tertiary-fixed-variant
+  );
+
+  --color-studio-error: var(--studio-error);
+  --color-studio-on-error: var(--studio-on-error);
+  --color-studio-error-container: var(--studio-error-container);
+  --color-studio-on-error-container: var(--studio-on-error-container);
+  --color-studio-destructive: var(--studio-destructive);
+
+  --color-studio-text-high-contrast: var(--studio-text-high-contrast);
+  --color-studio-text-muted: var(--studio-text-muted);
+  --color-studio-text-functional: var(--studio-text-functional);
+
+  --font-studio-heading: var(--font-geist-sans);
+  --font-studio-mono: var(--font-geist-mono);
+  --font-studio-body: var(--font-inter);
+
+  --text-studio-headline-lg: 24px;
+  --text-studio-headline-lg--line-height: 32px;
+  --text-studio-headline-lg--letter-spacing: -0.02em;
+  --text-studio-headline-lg--font-weight: 600;
+  --text-studio-headline-md: 18px;
+  --text-studio-headline-md--line-height: 24px;
+  --text-studio-headline-md--font-weight: 600;
+  --text-studio-body-lg: 16px;
+  --text-studio-body-lg--line-height: 24px;
+  --text-studio-body-md: 14px;
+  --text-studio-body-md--line-height: 20px;
+  --text-studio-label-md: 12px;
+  --text-studio-label-md--line-height: 16px;
+  --text-studio-label-md--letter-spacing: 0.01em;
+  --text-studio-label-md--font-weight: 500;
+  --text-studio-label-sm: 11px;
+  --text-studio-label-sm--line-height: 14px;
+  --text-studio-label-sm--letter-spacing: 0.02em;
+  --text-studio-label-sm--font-weight: 500;
+  --text-studio-mono: 12px;
+  --text-studio-mono--line-height: 16px;
+
+  --radius-studio-sm: 0.125rem;
+  --radius-studio: 0.25rem;
+  --radius-studio-lg: 0.5rem;
+  --radius-studio-full: 9999px;
+
+  --spacing-studio-sidebar: 280px;
+  --spacing-studio-inspector: 320px;
+  --spacing-studio-timeline: 240px;
+}
+
+.lenscape-studio {
+  scrollbar-color: var(--studio-surface-variant) transparent;
+}
+.lenscape-studio ::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+.lenscape-studio ::-webkit-scrollbar-track {
+  background: transparent;
+}
+.lenscape-studio ::-webkit-scrollbar-thumb {
+  background: var(--studio-surface-variant);
+  border-radius: 0.25rem;
+}
+.lenscape-studio ::-webkit-scrollbar-thumb:hover {
+  background: var(--studio-outline);
+}
+
+/* Drop-zone scanner beam — model upload screen */
+@keyframes studio-scan {
+  0% {
+    top: 0;
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.7;
+  }
+  90% {
+    opacity: 0.7;
+  }
+  100% {
+    top: 100%;
+    opacity: 0;
+  }
+}
+.studio-scanner-beam {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    var(--studio-primary),
+    transparent
+  );
+  box-shadow:
+    0 0 10px var(--studio-primary),
+    0 0 20px var(--studio-primary);
+  animation: studio-scan 3s infinite linear;
+}
+
+/* Faint animated grid backdrop — model ingestion screen */
+@keyframes studio-pan-grid {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 40px 40px;
+  }
+}
+.studio-mesh-bg {
+  background-image:
+    linear-gradient(var(--studio-border-subtle) 1px, transparent 1px),
+    linear-gradient(90deg, var(--studio-border-subtle) 1px, transparent 1px);
+  background-size: 40px 40px;
+  animation: studio-pan-grid 60s linear infinite;
+}

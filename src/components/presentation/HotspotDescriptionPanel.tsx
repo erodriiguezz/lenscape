@@ -6,10 +6,9 @@
  */
 
 import { Volume2, X } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
 import { useCurrentHotspot, useEditorStore } from "@/lib/store";
 import { speakNarration, stopNarration } from "@/lib/narration";
+import { cn } from "@/lib/utils";
 
 export function HotspotDescriptionPanel() {
   const open = useEditorStore((s) => s.hotspotPanelOpen);
@@ -28,20 +27,19 @@ export function HotspotDescriptionPanel() {
 
   return (
     <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20 flex p-4 md:p-6">
-      <div className="pointer-events-auto mx-auto w-full max-w-lg overflow-hidden rounded-2xl border border-border bg-background/95 shadow-2xl backdrop-blur-md">
-        <div className="flex items-start justify-between gap-3 border-b border-border px-4 py-3">
+      <div className="lenscape-studio pointer-events-auto mx-auto w-full max-w-lg overflow-hidden rounded-studio-lg border border-studio-border-subtle bg-studio-surface-container/95 text-studio-on-surface shadow-2xl backdrop-blur-md">
+        <div className="flex items-start justify-between gap-3 border-b border-studio-border-subtle px-4 py-3">
           <div className="min-w-0">
-            <p className="text-[11px] tracking-[0.16em] text-muted-foreground uppercase">
+            <p className="font-studio-heading text-studio-label-sm tracking-[0.16em] text-studio-text-muted uppercase">
               Hotspot
             </p>
-            <h2 className="truncate text-base font-semibold tracking-tight">
+            <h2 className="truncate font-studio-heading text-studio-headline-md text-studio-on-surface">
               {hotspot.title}
             </h2>
           </div>
           <div className="flex shrink-0 items-center gap-1">
-            <Button
-              variant="ghost"
-              size="icon-sm"
+            <button
+              type="button"
               aria-label={isNarrating ? "Stop reading" : "Read description"}
               onClick={() => {
                 if (isNarrating) {
@@ -49,43 +47,47 @@ export function HotspotDescriptionPanel() {
                   useEditorStore.setState({ isNarrating: false });
                   return;
                 }
-                speakNarration(hotspot.description, {
+                speakNarration(hotspot.narration ?? hotspot.description, {
                   onStart: () =>
                     useEditorStore.setState({ isNarrating: true }),
                   onEnd: () =>
                     useEditorStore.setState({ isNarrating: false }),
                 });
               }}
+              className="flex size-7 items-center justify-center rounded-studio text-studio-on-surface-variant transition-colors hover:bg-studio-surface-variant hover:text-studio-on-surface"
             >
               <Volume2
-                className={isNarrating ? "animate-pulse text-sky-600" : ""}
+                className={cn(
+                  "size-4",
+                  isNarrating && "animate-pulse text-studio-primary",
+                )}
               />
-            </Button>
-            <Button
-              variant="ghost"
-              size="icon-sm"
+            </button>
+            <button
+              type="button"
               aria-label="Close"
               onClick={closeHotspotPanel}
+              className="flex size-7 items-center justify-center rounded-studio text-studio-on-surface-variant transition-colors hover:bg-studio-surface-variant hover:text-studio-on-surface"
             >
-              <X />
-            </Button>
+              <X className="size-4" />
+            </button>
           </div>
         </div>
 
         <div className="space-y-2 p-4">
-          <p className="text-xs text-muted-foreground">
-            Description — this text is what gets narrated
+          <p className="font-studio-heading text-studio-label-sm text-studio-text-muted">
+            Description — this text is what viewers see
           </p>
           {editable ? (
-            <Textarea
+            <textarea
               value={hotspot.description}
               onChange={(e) =>
                 updateHotspotDescription(hotspot.id, e.target.value)
               }
-              className="min-h-28 resize-none text-sm leading-relaxed"
+              className="min-h-28 w-full resize-none rounded-studio border border-studio-border-subtle bg-studio-bg-canvas px-3 py-2 font-studio-body text-studio-body-md leading-relaxed text-studio-on-surface outline-none focus:border-studio-primary"
             />
           ) : (
-            <p className="text-sm leading-relaxed text-foreground/90">
+            <p className="font-studio-body text-studio-body-md leading-relaxed text-studio-on-surface/90">
               {hotspot.description}
             </p>
           )}

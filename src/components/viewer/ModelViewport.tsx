@@ -26,13 +26,13 @@ export function ModelViewport() {
   const useBounds = mode === "edit" && !hotspotPanelOpen;
 
   return (
-    <div className="relative h-full w-full bg-neutral-900">
+    <div className="relative h-full w-full bg-studio-bg-canvas">
       <Canvas
         camera={{ position: [12, 145, 18], fov: 40, near: 0.1, far: 2000 }}
         gl={{ antialias: true }}
         onPointerMissed={() => selectNode(null)}
       >
-        <color attach="background" args={["#0c0c0c"]} />
+        <color attach="background" args={["#050505"]} />
         <ambientLight intensity={0.55} />
         <directionalLight position={[40, 160, 30]} intensity={1.2} />
         <directionalLight position={[-30, 140, -20]} intensity={0.4} />
