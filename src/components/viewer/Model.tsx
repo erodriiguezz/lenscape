@@ -110,7 +110,23 @@ export function Model({ url }: { url: string }) {
   );
   const playingAnimation = useEditorStore((s) => s.playingAnimation);
 
-  const root = useMemo(() => scene.clone(true), [scene]);
+  // `.clone(true)` deep-clones the node hierarchy but not materials — every
+  // mesh keeps the *same* material reference as the cached source scene,
+  // and glTF exports commonly share one material across many meshes (here,
+  // all atria/auricle tissue shares one). Without cloning materials too,
+  // styling one mesh's opacity/emissive silently overwrites every sibling
+  // mesh using that same material instance.
+  const root = useMemo(() => {
+    const cloned = scene.clone(true);
+    cloned.traverse((child) => {
+      const mesh = child as THREE.Mesh;
+      if (!mesh.isMesh) return;
+      mesh.material = Array.isArray(mesh.material)
+        ? mesh.material.map((m) => m.clone())
+        : mesh.material.clone();
+    });
+    return cloned;
+  }, [scene]);
 
   useExplodeAnimation(root);
 

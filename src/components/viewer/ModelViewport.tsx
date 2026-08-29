@@ -72,6 +72,8 @@ export function ModelViewport() {
   return (
     <div className="relative h-full w-full bg-studio-bg-canvas">
       <Canvas
+        // TODO: heart-model-specific — derive from the model's actual bounds
+        // once uploads support arbitrary models instead of the one sample.
         camera={{ position: [12, 145, 18], fov: 40, near: 0.1, far: 2000 }}
         gl={{ antialias: true }}
         onPointerMissed={() => selectNode(null)}
@@ -96,6 +98,12 @@ export function ModelViewport() {
         <OrbitControls
           makeDefault
           enabled={orbitEnabled}
+          // Matches the heart model's approximate center. Without this,
+          // the pivot defaults to (0,0,0) — ~137 units below the model —
+          // so the very first rendered frame (before <Bounds> has fit
+          // anything) shows a cropped sliver at the top of the viewport
+          // instead of the model, on every load and every reload.
+          target={[0, 137, 0]}
           enableDamping
           dampingFactor={0.08}
           minDistance={0.5}
